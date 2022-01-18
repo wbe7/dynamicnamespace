@@ -1,0 +1,7 @@
+apiVersion: platform.cloudnative.space/v1
+kind: DynamicNamespace
+metadata:
+  name: dynamicnamespace-sample
+spec:
+  createSA: true
+  createResourceQuota: true
