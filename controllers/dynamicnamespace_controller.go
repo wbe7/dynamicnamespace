@@ -20,6 +20,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+
 	"github.com/sirupsen/logrus"
 	platformv1 "github.com/wbe7/dynamicnamespace/api/v1"
 	"github.com/wbe7/dynamicnamespace/config/crd"
@@ -29,7 +31,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"reflect"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -195,6 +196,10 @@ func (r *DynamicNamespaceReconciler) finalize(resource *platformv1.DynamicNamesp
 	//Проверка есть ли у созданного ns нужный label
 	namespace := &v1.Namespace{}
 	err = r.Get(context.TODO(), types.NamespacedName{Name: resource.Name}, namespace)
+	if err != nil && kerrors.IsNotFound(err) {
+		r.log.Infof("Целевой ресурс Application [%v.%v] уже удален", resource.GetName(), resource.GetNamespace())
+		return nil
+	}
 	namespaceLabels := namespace.GetLabels()
 
 	if namespaceLabels[defaultLabelKey] == fmt.Sprintf("%s.%s", resource.Namespace, resource.Name) {
