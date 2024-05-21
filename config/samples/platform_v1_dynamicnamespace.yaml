@@ -1,0 +1,12 @@
+apiVersion: platform.cloudnative.space/v1
+kind: DynamicNamespace
+metadata:
+  name: dynamicnamespace-sample
+spec:
+  roleBindingSubjects:
+  - kind: User
+    name: test
+  createQuota:
+    cpu: "2"
+    memory: "2Gi"
+    ephemeral-storage: "3Gi"

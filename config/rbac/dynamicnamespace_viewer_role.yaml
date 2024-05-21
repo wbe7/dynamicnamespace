@@ -1,0 +1,20 @@
+# permissions for end users to view dynamicnamespaces.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dynamicnamespace-viewer-role
+rules:
+- apiGroups:
+  - platform.cloudnative.space
+  resources:
+  - dynamicnamespaces
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - platform.cloudnative.space
+  resources:
+  - dynamicnamespaces/status
+  verbs:
+  - get
